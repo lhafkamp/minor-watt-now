@@ -2,7 +2,7 @@
   "name": "minor-watt-now",
   "version": "1.0.0",
   "description": "Monitor for festival power generators",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node server.js",
     "watch": "gulp",
@@ -11,16 +11,17 @@
     "build": "gulp js && gulp sass",
     "expose": "ngrok http 2500"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lhafkamp/minor-watt-now.git"
-  },
-  "author": "",
+  "repository": "lhafkamp/minor-watt-now.git",
+  "author": "Luuk Hafkamp, Sjoerd Beentjes, Merlijn Vos",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/lhafkamp/minor-watt-now/issues"
-  },
+  "bugs": "https://github.com/lhafkamp/minor-watt-now/issues",
   "homepage": "https://github.com/lhafkamp/minor-watt-now#readme",
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "socket.io": "^1.7.4",
+    "socket.io-client": "^1.7.4"
+  },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
     "gulp": "^3.9.1",
@@ -30,5 +31,23 @@
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^2.1.2",
     "xo": "^0.18.2"
+  },
+  "xo": {
+    "semicolon": false,
+    "space": true,
+    "env": [
+      "node",
+      "browser"
+    ],
+    "rules": {
+      "operator-linebreak": 0,
+      "camelcase": 0,
+      "no-unused-expressions": [
+        "error",
+        {
+          "allowTernary": true
+        }
+      ]
+    }
   }
 }
