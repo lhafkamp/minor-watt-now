@@ -33,7 +33,6 @@
     "xo": "^0.18.2"
   },
   "xo": {
-    "semicolon": false,
     "space": true,
     "env": [
       "node",

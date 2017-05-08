@@ -9,11 +9,11 @@ gulp.task('sass', () => {
   return gulp.src('./src/sass/main.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('style.css'))
-    .pipe(gulp.dest('./public/css'))
+    .pipe(gulp.dest('./public/css'));
 });
 
 gulp.task('js', () => {
-  gulp.src("./src/js/index.js")
+  gulp.src('./src/js/index.js')
     .pipe(browserify())
     .pipe(babel({
       presets: ['es2015']
@@ -26,4 +26,4 @@ gulp.task('js', () => {
 gulp.task('default', ['sass', 'js'], () => {
   gulp.watch('./src/sass/**/*.scss', ['sass']);
   gulp.watch('./src/js/**/*.js', ['js']);
-})
+});
