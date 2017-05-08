@@ -1,0 +1,27 @@
+{
+  "name": "minor-watt-now",
+  "version": "1.0.0",
+  "description": "Monitor for festival power generators",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lhafkamp/minor-watt-now.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lhafkamp/minor-watt-now/issues"
+  },
+  "homepage": "https://github.com/lhafkamp/minor-watt-now#readme",
+  "devDependencies": {
+    "babel-preset-env": "^1.4.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.3.0",
+    "uglifyify": "^3.0.4",
+    "watchify": "^3.9.0",
+    "xo": "^0.18.2"
+  }
+}
