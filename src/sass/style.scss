@@ -1,4 +1,68 @@
 * {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #EFEFEF;
+  color: grey;
+  font-weight: 100;
+  font-family: sans-serif;
+}
+
+#advice {
+  background: white;
+  padding: 2em;
+  height: 20em;
+}
+
+#generators {
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  padding: 1em 0 2em;
+
+  article {
+    display: flex;
+    flex-wrap: wrap;
+    background: white;
+    margin: 1em 0em 2em 1em;
+    min-width: 85%;
+    box-shadow: 5px 5px 5px #ccc;
+
+    span {
+      width: 100%;
+      height: 2.5em;
+      background: grey;
+
+      h1 {
+        color: white;
+        margin: .5em .5em .5em 1em;
+        font-weight: 100;
+      }
+    }
+
+    div {
+      width: 100%;
+      padding: 1em 1em 2em 1em;
+
+      h2 {
+        line-height: 1.4em;
+      }
+
+      p {
+        word-wrap: break-word;
+        line-height: 1.4em;
+      }
+    }
+  }
+}
+
+#graph {
+  background: white;
+  padding: 2em;
+  height: 80em;
 }
