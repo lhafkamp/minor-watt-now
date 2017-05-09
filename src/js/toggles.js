@@ -26,3 +26,7 @@ function messageSeen() {
 }
 
 messages.forEach(message => message.addEventListener('click', messageSeen));
+
+window.addEventListener("hashchange", () => {
+    window.scrollTo(window.scrollX, window.scrollY - 60);
+});

@@ -13,21 +13,23 @@ body {
 }
 
 nav {
-  background: grey;
-  ul {
-    display: flex;
-    justify-content: space-around;
-    li {
-      padding: 1em 3em 1em 3em;
-      list-style: none;
-      color: #EFEFEF;
-    }
+  background: $accentRed;
+  position: fixed;
+  z-index: 600;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  a {
+    padding: 1em 3em 1em 3em;
+  }
+  img {
+    width: 1.8em;
   }
 }
 
 #advice {
   background: white;
-  padding: 2em 1em 3em 1em;
+  padding: 6em 1em 3em 1em;
 
   .new {
     position: absolute;
@@ -35,7 +37,7 @@ nav {
     bottom: 1em;
     right: 1em;
     border-radius: 50%;
-    border: .4em solid grey;
+    border: .4em solid $accentRed;
     z-index: 400;
   }
 
@@ -84,7 +86,7 @@ nav {
     span {
       width: 100%;
       height: 2.5em;
-      background: grey;
+      background: $accentRed;
 
       h1 {
         color: white;
