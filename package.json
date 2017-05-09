@@ -17,6 +17,7 @@
   "bugs": "https://github.com/lhafkamp/minor-watt-now/issues",
   "homepage": "https://github.com/lhafkamp/minor-watt-now#readme",
   "dependencies": {
+    "csv-parse": "^1.2.0",
     "ejs": "^2.5.6",
     "express": "^4.15.2",
     "socket.io": "^1.7.4",
