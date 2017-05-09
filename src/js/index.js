@@ -1,1 +1,3 @@
-console.log('Init JS');
+const generator = require('./generator');
+
+generator();

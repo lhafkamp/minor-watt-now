@@ -13,13 +13,8 @@ gulp.task('sass', () => {
 });
 
 gulp.task('js', () => {
-  gulp.src('./src/js/index.js')
+  return gulp.src('./src/js/index.js')
     .pipe(browserify())
-    .pipe(babel({
-      presets: ['es2015']
-    }))
-    .pipe(concat('index.js'))
-    .pipe(uglify())
     .pipe(gulp.dest('./public/js'));
 });
 

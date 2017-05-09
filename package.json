@@ -18,6 +18,7 @@
   "homepage": "https://github.com/lhafkamp/minor-watt-now#readme",
   "dependencies": {
     "csv-parse": "^1.2.0",
+    "d3": "^4.8.0",
     "ejs": "^2.5.6",
     "express": "^4.15.2",
     "socket.io": "^1.7.4",
@@ -42,6 +43,7 @@
     "rules": {
       "operator-linebreak": 0,
       "camelcase": 0,
+      "no-implicit-coercion": 0,
       "no-unused-expressions": [
         "error",
         {

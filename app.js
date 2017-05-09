@@ -30,6 +30,10 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('/generator', (req, res) => {
+  res.render('generator');
+});
+
 server.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
