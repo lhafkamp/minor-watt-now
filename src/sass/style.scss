@@ -12,9 +12,22 @@ body {
   font-family: sans-serif;
 }
 
+nav {
+  background: grey;
+  ul {
+    display: flex;
+    justify-content: space-around;
+    li {
+      padding: 1em 3em 1em 3em;
+      list-style: none;
+      color: #EFEFEF;
+    }
+  }
+}
+
 #advice {
   background: white;
-  padding: 1em 1em 3em 1em;
+  padding: 2em 1em 3em 1em;
 
   .new {
     position: absolute;
