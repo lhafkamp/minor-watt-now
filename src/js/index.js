@@ -1,1 +1,1 @@
-console.log('Init JS');
+require('./toggles');
