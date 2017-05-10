@@ -9,7 +9,11 @@ const app = express();
 const server = http(app);
 const io = socketio(server);
 const port = process.env.PORT || 3000;
+
 let range = [];
+let simData = '';
+let upData = '';
+let downData = '';
 
 app.use(express.static(path.join(__dirname, '/public')));
 app.set('views', path.join(__dirname, 'views'));
@@ -64,21 +68,16 @@ function algorithm(measurement) {
   console.log(deviation);
 }
 
-// example of sending JSON messages to the client
-let simData = '';
-let upData = '';
-let downData = '';
-
 fs.readFile('./src/data/messages.json', (err, data) => {
+  if (err) {
+    throw err;
+  }
   simData = JSON.parse(data).filter(data => data.type === 'sim');
   upData = JSON.parse(data).filter(data => data.type === 'stroomup');
   downData = JSON.parse(data).filter(data => data.type === 'stroomdown');
 });
 
-io.on('connection', (socket) => {
-  // timeout to fake an incoming message
-  // TODO replace this with the algorithm and send simData/upData/downData accordingly
-
+io.on('connection', socket => {
   setTimeout(() => {
     socket.emit('newMessage', simData);
   }, 3000);
