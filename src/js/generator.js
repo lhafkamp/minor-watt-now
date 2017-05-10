@@ -2,6 +2,10 @@ const d3 = require('d3');
 
 const data = [];
 
+// Configuration
+const duration = 200;
+const ticks = 30;
+
 const windowWidth = window.innerWidth;
 
 const margin = {top: 20, right: 70, bottom: 30, left: 20};
@@ -9,9 +13,7 @@ const width = windowWidth - margin.left - margin.right;
 const height = 350 - margin.top - margin.bottom;
 
 let minDate = new Date();
-let maxDate = d3.timeMinute.offset(minDate, -9);
-
-const duration = 1000;
+let maxDate = d3.timeMinute.offset(minDate, -ticks);
 
 const parseTime = d3.timeFormat('%H:%M');
 
@@ -45,7 +47,7 @@ const lineArea = d3.area()
 const xAxis = d3
   .axisBottom()
   .tickFormat(d => {
-    const date = d3.timeMinute.offset(d, -9);
+    const date = d3.timeMinute.offset(d, -ticks);
     return parseTime(date);
   })
   .scale(x);
@@ -81,7 +83,7 @@ d3.csv('data/mock.csv', (error, data) => {
       const point = data[index + 1];
 
       point.minDate = new Date(point.timestamp * 1000);
-      point.maxDate = d3.timeMinute.offset(point.minDate, 9);
+      point.maxDate = d3.timeMinute.offset(point.minDate, ticks);
 
       minDate = point.minDate;
       maxDate = point.maxDate;
@@ -98,7 +100,7 @@ function tick(point) {
   data.push(point);
 
   // Remote old data (max 20 points)
-  if (data.length > 10) {
+  if (data.length > ticks + 1) {
     data.shift();
   }
 
