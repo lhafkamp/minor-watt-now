@@ -1,16 +1,15 @@
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+.axis {
+  font-family: sans-serif;
+  font-size: 16px;
 }
 
-.area.below {
-  fill: #B2C9D6
+.smoothline {
+  fill: none;
+  stroke: #060c36;
+  stroke-width: 3px;
 }
 
-.line {
-  fill: none;
-  stroke: #000;
-  stroke-width: 1;
+.area {
+  fill: #B2C9D6;
+  opacity: 0.5;
 }

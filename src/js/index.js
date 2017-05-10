@@ -1,3 +1,1 @@
-const generator = require('./generator');
-
-generator();
+require('./generator');

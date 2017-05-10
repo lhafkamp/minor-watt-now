@@ -1,89 +1,123 @@
 const d3 = require('d3');
 
-const generator = () => {
-  const margin = {top: 20, right: 20, bottom: 30, left: 50};
-  const width = 960 - margin.left - margin.right;
-  const height = 500 - margin.top - margin.bottom;
+const data = [];
 
-  const x = d3.scaleTime()
-      .range([0, width]);
+const windowWidth = window.innerWidth;
 
-  const y = d3.scaleLinear()
-      .range([height, 0]);
+const margin = {top: 20, right: 70, bottom: 30, left: 20};
+const width = windowWidth - margin.left - margin.right;
+const height = 350 - margin.top - margin.bottom;
 
-  const line = d3.area()
-      .x(d => x(d.date))
-      .y(d => y(d.average));
+let minDate = new Date();
+let maxDate = d3.timeMinute.offset(minDate, -9);
 
-  const area = d3.area()
-      .x(d => x(d.date))
-      .y1(d => y(d.max));
+const duration = 1000;
 
-  const svg = d3.select('body').append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-    .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+const parseTime = d3.timeFormat('%H:%M');
 
-  d3.csv('data/mock-small.csv', (error, data) => {
-    if (error) {
-      throw error;
+const chart = d3.select('#chart')
+  .attr('width', width + margin.left + margin.right)
+  .attr('height', height + margin.top + margin.bottom)
+  .append('g')
+  .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+const x = d3
+  .scaleTime()
+  .domain([minDate, maxDate])
+  .range([0, width]);
+
+const y = d3
+  .scaleLinear()
+  .domain([0, 110000])
+  .range([height, 0]);
+
+const smoothLine = d3.line()
+  .x(d => x(d.minDate))
+  .y(d => y(d.average));
+
+const lineArea = d3.area()
+  .x(d => x(d.minDate))
+  .y0(d => y(d.min))
+  .y1(d => y(d.max));
+
+// -----------------------------------
+// Draw the axis
+const xAxis = d3
+  .axisBottom()
+  .tickFormat(d => {
+    const date = d3.timeMinute.offset(d, -9);
+    return parseTime(date);
+  })
+  .scale(x);
+
+const yAxis = d3
+  .axisRight()
+  .scale(y);
+
+const axisX = chart.append('g').attr('class', 'x axis')
+  .attr('transform', `translate(0, ${height})`)
+  .call(xAxis);
+
+const axisY = chart.append('g').attr('class', 'y axis')
+  .attr('transform', `translate(${width}, 0)`)
+  .call(yAxis);
+
+// Append the holder for line chart and fill area
+const path = chart
+  .append('g')
+  .attr('transform', `translate(${x(d3.timeMinute.offset(maxDate, 1))})`)
+  .append('path');
+
+const areaPath = chart
+  .append('g')
+  .attr('transform', `translate(${x(d3.timeMinute.offset(maxDate, 1))})`)
+  .append('path');
+
+d3.csv('data/mock.csv', (error, data) => {
+  let index = 0;
+
+  setInterval(() => {
+    if (data[index + 1]) {
+      const point = data[index + 1];
+
+      point.minDate = new Date(point.timestamp * 1000);
+      point.maxDate = d3.timeMinute.offset(point.minDate, 9);
+
+      minDate = point.minDate;
+      maxDate = point.maxDate;
+
+      tick(point);
+
+      index++;
     }
+  }, duration);
+});
 
-    data.forEach(d => {
-      d.date = new Date(d.timestamp * 1000);
+// Main loop
+function tick(point) {
+  data.push(point);
 
-      d.max = +d.max;
-      d.min = +d.min;
-    });
+  // Remote old data (max 20 points)
+  if (data.length > 10) {
+    data.shift();
+  }
 
-    x.domain(d3.extent(data, d => d.date));
+  // Draw new line
+  path.datum(data)
+    .attr('class', 'smoothline')
+    .attr('d', smoothLine);
 
-    y.domain([
-      d3.min(data, d => Math.min(d.max, d.min)),
-      d3.max(data, d => Math.max(d.max, d.min))
-    ]);
+  // Draw new fill area
+  areaPath.datum(data)
+    .attr('class', 'area')
+    .attr('d', lineArea);
 
-    svg.datum(data);
+  // Shift the chart left
+  x.domain([minDate, maxDate]);
 
-    svg.append('clipPath')
-        .attr('id', 'clip-below')
-      .append('path')
-        .attr('d', area.y0(height));
+  axisX
+    .call(xAxis);
 
-    svg.append('clipPath')
-        .attr('id', 'clip-above')
-      .append('path')
-        .attr('d', area.y0(0));
-
-    svg.append('path')
-        .attr('class', 'area above')
-        .attr('clip-path', 'url(#clip-above)')
-        .attr('d', area.y0(d => y(d.min)));
-
-    svg.append('path')
-        .attr('class', 'area below')
-        .attr('clip-path', 'url(#clip-below)')
-        .attr('d', area);
-
-    svg.append('path')
-        .attr('class', 'line')
-        .attr('d', line);
-
-    svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x));
-
-    svg.append('g')
-        .attr('class', 'y axis')
-        .call(d3.axisLeft(y))
-      .append('text')
-        .attr('transform', 'rotate(-90)')
-        .attr('y', 6)
-        .attr('dy', '.71em')
-        .style('text-anchor', 'end')
-        .text('Temperature (ºF)');
-  });
-};
-module.exports = generator;
+  axisY
+    .call(yAxis);
+}
