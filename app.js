@@ -35,6 +35,10 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('/generator', (req, res) => {
+  res.render('generator');
+});
+
 function interval(data) {
   let i = -1;
   tick();
