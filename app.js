@@ -9,7 +9,7 @@ const app = express();
 const server = http(app);
 const io = socketio(server);
 const port = process.env.PORT || 3000;
-let arr = [];
+let range = [];
 
 app.use(express.static(path.join(__dirname, '/public')));
 app.set('views', path.join(__dirname, 'views'));
@@ -44,9 +44,24 @@ function interval(data) {
   }
 }
 
-function algorithm(item) {
-  arr = arr.slice(-9).concat(item);
-  console.log(arr);
+function algorithm(measurement) {
+  range = range.slice(-9).concat(measurement);
+  const average = range.reduce((acc, result, i) => {
+    if (i === range.length - 1) {
+      return ((acc + Number(result.average)) / range.length);
+    }
+    return acc + Number(result.average);
+  }, 0);
+
+  const variance = range.reduce((acc, result, i) => {
+    if (i === range.length - 1) {
+      return ((acc + Math.pow((Number(result.average) - average), 2)) / range.length);
+    }
+    return acc + Math.pow((Number(result.average) - average), 2);
+  }, 0);
+
+  const deviation = Math.sqrt(variance);
+  console.log(deviation);
 }
 
 server.listen(port, () => {
