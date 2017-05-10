@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img width="50%" src="media/example.png" alt="example">
+  <img width="55%" src="media/example.png" alt="example">
   <br>
   <br>
   Watt-Now
