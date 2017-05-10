@@ -1,4 +1,118 @@
 * {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #EFEFEF;
+  color: grey;
+  font-weight: 100;
+  font-family: sans-serif;
+}
+
+nav {
+  background: $accentRed;
+  position: fixed;
+  z-index: 600;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  a {
+    padding: 1em 3em 1em 3em;
+  }
+  img {
+    width: 1.8em;
+  }
+}
+
+#advice {
+  background: white;
+  padding: 6em 1em 3em 1em;
+
+  .new {
+    position: absolute;
+    padding: .1em;
+    bottom: 1em;
+    right: 1em;
+    border-radius: 50%;
+    border: .4em solid $accentRed;
+    z-index: 400;
+  }
+
+  details {
+    cursor: pointer;
+    margin-bottom: .2em;
+
+    summary {
+      position: relative;
+      z-index: 200;
+      background: #EFEFEF;
+      padding: 1em;
+      border-bottom: 1px solid grey;
+    }
+
+    div {
+      padding: 1em;
+
+      h2 {
+        line-height: 1.5em;
+      }
+
+      p {
+        line-height: 1.5em;
+        word-wrap: break-word;
+      }
+    }
+  }
+}
+
+#generators {
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  padding: 1em 0 2em;
+
+  article {
+    display: flex;
+    flex-wrap: wrap;
+    background: white;
+    margin: 1em 0em 2em 1em;
+    min-width: 85%;
+    box-shadow: 5px 5px 5px #ccc;
+
+    span {
+      width: 100%;
+      height: 2.5em;
+      background: $accentRed;
+
+      h1 {
+        color: white;
+        margin: .5em .5em .5em 1em;
+        font-weight: 100;
+      }
+    }
+
+    div {
+      width: 100%;
+      padding: 1em 1em 2em 1em;
+
+      h2 {
+        line-height: 1.4em;
+      }
+
+      p {
+        word-wrap: break-word;
+        line-height: 1.4em;
+      }
+    }
+  }
+}
+
+#graph {
+  background: white;
+  padding: 2em;
+  height: 80em;
 }

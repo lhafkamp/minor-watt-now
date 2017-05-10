@@ -9,7 +9,7 @@
     "build-js": "gulp js",
     "build-css": "gulp sass",
     "build": "gulp js && gulp sass",
-    "expose": "ngrok http 2500"
+    "expose": "ngrok http 3000"
   },
   "repository": "lhafkamp/minor-watt-now.git",
   "author": "Luuk Hafkamp, Sjoerd Beentjes, Merlijn Vos",
@@ -31,6 +31,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^2.1.2",
+    "ngrok": "^2.2.8",
     "xo": "^0.18.2"
   },
   "xo": {
