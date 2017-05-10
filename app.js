@@ -49,6 +49,34 @@ function algorithm(item) {
   console.log(arr);
 }
 
+// example of sending JSON messages to the client
+let simData = '';
+let upData = '';
+let downData = '';
+
+fs.readFile('./src/data/messages.json', (err, data) => {
+  simData = JSON.parse(data).filter(data => data.type === 'sim');
+  upData = JSON.parse(data).filter(data => data.type === 'stroomup');
+  downData = JSON.parse(data).filter(data => data.type === 'stroomdown');
+});
+
+io.on('connection', (socket) => {
+  // timeout to fake an incoming message
+  // TODO replace this with the algorithm and send simData/upData/downData accordingly
+
+  setTimeout(() => {
+    socket.emit('newMessage', simData);
+  }, 3000);
+
+  setTimeout(() => {
+    socket.emit('newMessage', upData);
+  }, 7000);
+
+  setTimeout(() => {
+    socket.emit('newMessage', downData);
+  }, 8500);
+});
+
 server.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
