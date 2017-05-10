@@ -30,7 +30,7 @@ const x = d3
 
 const y = d3
   .scaleLinear()
-  .domain([0, 110000])
+  .domain([0, 120000])
   .range([height, 0]);
 
 const smoothLine = d3.line()
@@ -42,7 +42,6 @@ const lineArea = d3.area()
   .y0(d => y(d.min))
   .y1(d => y(d.max));
 
-// -----------------------------------
 // Draw the axis
 const xAxis = d3
   .axisBottom()
@@ -54,6 +53,7 @@ const xAxis = d3
 
 const yAxis = d3
   .axisRight()
+  .tickFormat(d => `${d / 1000}K`)
   .scale(y);
 
 const axisX = chart.append('g').attr('class', 'x axis')
@@ -117,9 +117,9 @@ function tick(point) {
   // Shift the chart left
   x.domain([minDate, maxDate]);
 
-  axisX
-    .call(xAxis);
-
   axisY
     .call(yAxis);
+
+  axisX
+    .call(xAxis);
 }
