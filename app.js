@@ -62,6 +62,8 @@ fs.readFile('./src/data/messages.json', (err, data) => {
 
 io.on('connection', (socket) => {
   // timeout to fake an incoming message
+  // TODO replace this with the algorithm and send simData/upData/downData accordingly
+
   setTimeout(() => {
     socket.emit('newMessage', simData);
   }, 3000);
