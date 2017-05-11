@@ -36,6 +36,9 @@ With this information they can see how they need to handle their generators.
 -  [x] real-time D3.js graph that shows how much voltage is used per minute
 -  [x] history of old notifications
 
+## How does it work?
+The app gets real time data from the generators at the festival. It uses an algorithm to determine if the infra-team members need to get a notification. The notifications are real-time and have a badge when they are not read.
+
 ## Build
 To run the application:
 ```bash
