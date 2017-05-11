@@ -2,16 +2,17 @@ const history = document.querySelector('#history div');
 const advice = document.querySelector('#advice div');
 const audio = document.querySelector('audio');
 const io = require('socket.io-client');
+
 const socket = io.connect();
 
 // Hack to force-play audio on mobile
 document.addEventListener('touchstart', () => {
-    audio.play();
-    audio.pause();
+  audio.play();
+  audio.pause();
 });
 
 // Create new message
-socket.on('newMessage', (data) => {
+socket.on('newMessage', data => {
   audio.play();
   messageDOM(data[0]);
 });
@@ -27,12 +28,12 @@ function messageDOM(data) {
       </div>
     </details>
   </article>
-  `)
+  `);
 }
 
 // Remove message
-socket.on('removeMessage', (data) => {
-  let oldMessages = [];
+socket.on('removeMessage', data => {
+  const oldMessages = [];
 
   document.body.querySelectorAll('summary').forEach(msg => {
     oldMessages.push(msg.innerText);
@@ -58,5 +59,5 @@ function historyDOM(data) {
         <p>${data.advice}</p>
       </div>
     </details>
-  `)
+  `);
 }
