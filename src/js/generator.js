@@ -6,10 +6,10 @@ const data = [];
 const duration = 200;
 const ticks = 30;
 
-const windowWidth = window.innerWidth;
+const containerWidth = document.querySelector('#chart').parentNode.offsetWidth;
 
-const margin = {top: 20, right: 70, bottom: 30, left: 20};
-const width = windowWidth - margin.left - margin.right;
+const margin = {top: 20, right: 50, bottom: 30, left: 20};
+const width = containerWidth - margin.left - margin.right;
 const height = 350 - margin.top - margin.bottom;
 
 let minDate = new Date();
