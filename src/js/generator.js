@@ -4,7 +4,8 @@ const io = require('socket.io-client');
 const socket = io.connect();
 
 const data = [];
-const markers = [];
+const predictions = [];
+const performances = [];
 
 const ticks = 30;
 
@@ -80,11 +81,6 @@ const path = chart
   .attr('transform', `translate(${x(d3.timeMinute.offset(maxDate, 1))})`)
   .append('path');
 
-const markerArea = chart
-  .append('g')
-  .attr('class', 'markers')
-  .attr('transform', `translate(${width})`);
-
 socket.on('dataPoint', point => {
   point.minDate = new Date(point.timestamp * 1000);
   point.maxDate = d3.timeMinute.offset(point.minDate, ticks);
@@ -98,24 +94,47 @@ socket.on('dataPoint', point => {
 socket.on('predicted', point => {
   point.date = new Date(point.timestamp * 1000);
 
-  drawPrediction(point);
+  if (point.type === 'prediction') {
+    drawPrediction(point);
+  } else if (point.type === 'performance') {
+    drawPerformances(point);
+  }
 });
 
 function drawPrediction(point) {
   if (point) {
-    markers.push(point);
+    predictions.push(point);
   }
 
-  chart.selectAll('.marker').remove();
+  chart.selectAll('.prediction').remove();
 
-  chart.selectAll('.marker')
-      .data(markers)
+  chart.selectAll('.prediction')
+      .data(predictions)
     .enter().append('circle')
-      .attr('class', 'marker')
-      .style('fill', '#F12D4B')
+      .attr('class', 'prediction')
+      .style('fill', d => d.kind === 'spike' ? '#F12D4B' : '#27C86A')
       .attr('r', 10)
       .attr('cx', d => x(d3.timeMinute.offset(d.date, ticks)))
       .attr('cy', d => y(d.average));
+}
+
+function drawPerformances(point) {
+  if (point) {
+    performances.push(point);
+  }
+
+  chart.selectAll('.performance').remove();
+
+  chart.selectAll('.performance')
+      .data(performances)
+    .enter().append('rect')
+      .attr('class', 'performance')
+      .style('fill', d => d.kind === 'start' ? '#F12D4B' : '#27C86A')
+      .attr('width', 20)
+      .attr('height', 20)
+      .attr('transform', 'translate(-10, -10)')
+      .attr('x', d => x(d3.timeMinute.offset(d.date, ticks)))
+      .attr('y', d => y(d.average));
 }
 
 // Main loop
@@ -147,4 +166,5 @@ function tick(point) {
     .call(xAxis);
 
   drawPrediction();
+  drawPerformances();
 }
