@@ -1,15 +1,16 @@
 const d3 = require('d3');
+const io = require('socket.io-client');
+
+const socket = io.connect();
 
 const data = [];
 
-// Configuration
-const duration = 200;
 const ticks = 30;
 
-const windowWidth = window.innerWidth;
+const containerWidth = document.querySelector('#chart').parentNode.offsetWidth;
 
-const margin = {top: 20, right: 70, bottom: 30, left: 20};
-const width = windowWidth - margin.left - margin.right;
+const margin = {top: 20, right: 50, bottom: 30, left: 20};
+const width = containerWidth - margin.left - margin.right;
 const height = 350 - margin.top - margin.bottom;
 
 let minDate = new Date();
@@ -54,45 +55,38 @@ const xAxis = d3
 const yAxis = d3
   .axisRight()
   .tickFormat(d => `${d / 1000}K`)
+  .tickSize(-width)
   .scale(y);
 
-const axisX = chart.append('g').attr('class', 'x axis')
+const axisX = chart.append('g')
+  .attr('class', 'x axis')
   .attr('transform', `translate(0, ${height})`)
   .call(xAxis);
 
-const axisY = chart.append('g').attr('class', 'y axis')
+const axisY = chart.append('g')
+  .attr('class', 'y axis')
   .attr('transform', `translate(${width}, 0)`)
   .call(yAxis);
 
 // Append the holder for line chart and fill area
-const path = chart
-  .append('g')
-  .attr('transform', `translate(${x(d3.timeMinute.offset(maxDate, 1))})`)
-  .append('path');
-
 const areaPath = chart
   .append('g')
   .attr('transform', `translate(${x(d3.timeMinute.offset(maxDate, 1))})`)
   .append('path');
 
-d3.csv('data/mock.csv', (error, data) => {
-  let index = 0;
+const path = chart
+  .append('g')
+  .attr('transform', `translate(${x(d3.timeMinute.offset(maxDate, 1))})`)
+  .append('path');
 
-  setInterval(() => {
-    if (data[index + 1]) {
-      const point = data[index + 1];
+socket.on('dataPoint', point => {
+  point.minDate = new Date(point.timestamp * 1000);
+  point.maxDate = d3.timeMinute.offset(point.minDate, ticks);
 
-      point.minDate = new Date(point.timestamp * 1000);
-      point.maxDate = d3.timeMinute.offset(point.minDate, ticks);
+  minDate = point.minDate;
+  maxDate = point.maxDate;
 
-      minDate = point.minDate;
-      maxDate = point.maxDate;
-
-      tick(point);
-
-      index++;
-    }
-  }, duration);
+  tick(point);
 });
 
 // Main loop
@@ -104,15 +98,15 @@ function tick(point) {
     data.shift();
   }
 
-  // Draw new line
-  path.datum(data)
-    .attr('class', 'smoothline')
-    .attr('d', smoothLine);
-
   // Draw new fill area
   areaPath.datum(data)
     .attr('class', 'area')
     .attr('d', lineArea);
+
+  // Draw new line
+  path.datum(data)
+    .attr('class', 'smoothline')
+    .attr('d', smoothLine);
 
   // Shift the chart left
   x.domain([minDate, maxDate]);
