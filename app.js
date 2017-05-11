@@ -36,6 +36,10 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('/generator', (req, res) => {
+  res.render('generator');
+});
+
 function interval(data) {
   let i = -1;
   tick();
@@ -44,6 +48,9 @@ function interval(data) {
     i++;
     if (data[i]) {
       algorithm(data[i]);
+      if (data[i]) {
+        io.sockets.emit('dataPoint', data[i]);
+      }
       setTimeout(tick, 1000);
     }
   }
@@ -85,7 +92,7 @@ fs.readFile('./src/data/messages.json', (err, data) => {
 io.on('connection', socket => {
   setTimeout(() => {
     socket.emit('newMessage', simData);
-  }, 3000);
+  }, 1000);
 
   setTimeout(() => {
     socket.emit('newMessage', upData);
@@ -94,6 +101,10 @@ io.on('connection', socket => {
   setTimeout(() => {
     socket.emit('newMessage', downData);
   }, 8500);
+
+  setTimeout(() => {
+    socket.emit('removeMessage', upData);
+  }, 10000);
 });
 
 server.listen(port, () => {

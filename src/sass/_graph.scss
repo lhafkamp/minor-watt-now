@@ -1,0 +1,15 @@
+.axis {
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.smoothline {
+  fill: none;
+  stroke: $mainBlue;
+  stroke-width: 3px;
+}
+
+.area {
+  fill: lighten($accentBlue, 30%);
+  opacity: 0.5;
+}
