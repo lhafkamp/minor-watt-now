@@ -80,13 +80,13 @@ nav {
   overflow-y: hidden;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
-  padding: 1em 0 2em;
+  padding: 1em 0;
 
   article {
     display: flex;
     flex-wrap: wrap;
     background: white;
-    margin: 1em 0em 2em 1em;
+    margin: 0 0 0 1em;
     min-width: 85%;
     box-shadow: 5px 5px 5px #ccc;
 
