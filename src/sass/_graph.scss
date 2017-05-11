@@ -13,3 +13,15 @@
   fill: lighten($accentBlue, 30%);
   opacity: 0.5;
 }
+
+.domain {
+  display: none;
+}
+
+.tick line {
+  stroke: $otherGrey;
+}
+
+.tick text {
+  fill: #808080;
+}
