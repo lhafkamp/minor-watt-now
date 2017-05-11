@@ -14,7 +14,10 @@ if (localStorage.getItem('oldMessages') === null) {
     .filter(data => data != "");
 
   spanArray.forEach(id => {
-    document.getElementById(`${id}`).classList.remove('new');
+    const pressed = document.getElementById(`${id}`);
+    if (document.body.contains(pressed)) {
+      pressed.classList.remove('new');
+    }
   });
 }
 
