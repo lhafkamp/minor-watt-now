@@ -40,6 +40,13 @@ app.get('/generator', (req, res) => {
   res.render('generator');
 });
 
+app.get('/history', (req, res) => {
+  const derp = 'werwer';
+  res.render('history', {
+    derp: derp
+  });
+});
+
 function interval(data) {
   let i = -1;
   tick();
@@ -103,8 +110,12 @@ io.on('connection', socket => {
   }, 8500);
 
   setTimeout(() => {
-    socket.emit('removeMessage', upData);
-  }, 10000);
+    socket.emit('removeMessage', simData);
+  }, 3000);
+
+  setTimeout(() => {
+    socket.emit('removeMessage', downData);
+  }, 12000);
 });
 
 server.listen(port, () => {

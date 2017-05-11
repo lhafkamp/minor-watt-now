@@ -1,4 +1,5 @@
-const advice = document.querySelector('#advice');
+const history = document.querySelector('#history div');
+const advice = document.querySelector('#advice div');
 const audio = document.querySelector('audio');
 const io = require('socket.io-client');
 const socket = io.connect();
@@ -41,7 +42,21 @@ socket.on('removeMessage', (data) => {
 
   document.body.querySelectorAll('article').forEach(msg => {
     if (msg.innerHTML.indexOf(deadMessage) !== -1) {
+      historyDOM(data[0]);
       msg.remove();
     }
   });
 });
+
+function historyDOM(data) {
+  return history.insertAdjacentHTML('afterbegin',
+  `
+    <details>
+      <summary>${data.message}</summary>
+      <div>
+        <h2>${data.header}</h2>
+        <p>${data.advice}</p>
+      </div>
+    </details>
+  `)
+}
