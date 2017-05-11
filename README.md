@@ -9,6 +9,9 @@
 ## The app
 This app makes sure the infra-team working on a festival gets to know what needs to be done, before it needs to be done. Our app shows incoming status updates, these updates can be based on an algorithm that checks if the voltage peak is rapidly increasing/decreasing or if a generator is low on its 2G budget. Besides the messages the infra-team can see a real-time graph that displays the voltage usage of a generator.
 
+## How does it work?
+The app gets real time data from the generators at the festival. It uses an algorithm to determine if the infra-team members need to get a notification. The notifications are real-time and have a badge when they are not read.
+
 ## Build
 To run the application:
 ```bash
