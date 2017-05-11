@@ -4,6 +4,7 @@ const io = require('socket.io-client');
 const socket = io.connect();
 
 const data = [];
+const markers = [];
 
 const ticks = 30;
 
@@ -79,6 +80,11 @@ const path = chart
   .attr('transform', `translate(${x(d3.timeMinute.offset(maxDate, 1))})`)
   .append('path');
 
+const markerArea = chart
+  .append('g')
+  .attr('class', 'markers')
+  .attr('transform', `translate(${width})`);
+
 socket.on('dataPoint', point => {
   point.minDate = new Date(point.timestamp * 1000);
   point.maxDate = d3.timeMinute.offset(point.minDate, ticks);
@@ -89,9 +95,32 @@ socket.on('dataPoint', point => {
   tick(point);
 });
 
-socket.on('predicted', result => {
-  console.log(result);
+socket.on('predicted', point => {
+  point.date = new Date(point.timestamp * 1000);
+
+  drawPrediction(point);
 });
+
+function drawPrediction(point) {
+  console.log('mark');
+
+  console.log(point);
+
+  if (point) {
+    markers.push(point);
+  }
+
+  chart.selectAll('.marker').remove();
+
+  chart.selectAll('.marker')
+      .data(markers)
+    .enter().append('circle')
+      .attr('class', 'marker')
+      .style('fill', '#F12D4B')
+      .attr('r', 10)
+      .attr('cx', d => x(d3.timeMinute.offset(d.date, ticks)))
+      .attr('cy', d => y(d.average));
+}
 
 // Main loop
 function tick(point) {
@@ -120,4 +149,6 @@ function tick(point) {
 
   axisX
     .call(xAxis);
+
+  drawPrediction();
 }
