@@ -49,11 +49,6 @@ app.get('/generator', (req, res) => {
   res.render('generator');
 });
 
-app.get('/history', (req, res) => {
-  const derp = 'werwer';
-  res.render('history', {derp});
-});
-
 function interval(data) {
   let i = -1;
   tick();
