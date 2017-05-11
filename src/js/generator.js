@@ -102,10 +102,6 @@ socket.on('predicted', point => {
 });
 
 function drawPrediction(point) {
-  console.log('mark');
-
-  console.log(point);
-
   if (point) {
     markers.push(point);
   }
