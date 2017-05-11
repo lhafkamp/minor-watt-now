@@ -12,13 +12,22 @@ const port = process.env.PORT || 3000;
 
 let deviations = [];
 let range = [];
-let simData = '';
-let upData = '';
-let downData = '';
+let credit;
+let spike;
+let drop;
 
 app.use(express.static(path.join(__dirname, '/public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+fs.readFile('./src/data/messages.json', (err, data) => {
+  if (err) {
+    throw err;
+  }
+  credit = JSON.parse(data).filter(data => data.type === 'sim');
+  spike = JSON.parse(data).filter(data => data.type === 'stroomup');
+  drop = JSON.parse(data).filter(data => data.type === 'stroomdown');
+});
 
 fs.readFile('./src/data/mock.csv', (err, data) => {
   if (err) {
@@ -42,9 +51,7 @@ app.get('/generator', (req, res) => {
 
 app.get('/history', (req, res) => {
   const derp = 'werwer';
-  res.render('history', {
-    derp: derp
-  });
+  res.render('history', {derp});
 });
 
 function interval(data) {
@@ -83,41 +90,13 @@ function algorithm(measurement) {
 
   if (deviations.length > 1 && deviations[0] !== 0) {
     percentage = Math.round(((deviations[1] / deviations[0]) * 100) - 100);
-    // console.log(deviations[1]);
     percentage > 0 ? console.log(`+${percentage}%`) : console.log(`${percentage}%`);
   }
 
   if (percentage > 100) {
-    io.sockets.emit('newMessage', 'OMG piek incoming bitch');
+    io.sockets.emit('newMessage', spike);
   }
 }
-
-fs.readFile('./src/data/messages.json', (err, data) => {
-  if (err) {
-    throw err;
-  }
-  simData = JSON.parse(data).filter(data => data.type === 'sim');
-  upData = JSON.parse(data).filter(data => data.type === 'stroomup');
-  downData = JSON.parse(data).filter(data => data.type === 'stroomdown');
-});
-
-// io.on('connection', socket => {
-//   setTimeout(() => {
-//     socket.emit('newMessage', simData);
-//   }, 1000);
-//
-//   setTimeout(() => {
-//     socket.emit('newMessage', upData);
-//   }, 7000);
-//
-//   setTimeout(() => {
-//     socket.emit('newMessage', downData);
-//   }, 8500);
-//
-//   setTimeout(() => {
-//     socket.emit('removeMessage', upData);
-//   }, 10000);
-// });
 
 server.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
