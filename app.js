@@ -19,17 +19,17 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// fs.readFile('./src/data/mock.csv', (err, data) => {
-//   if (err) {
-//     throw err;
-//   }
-//   parse(data, {columns: ['timestamp', 'average', 'min', 'max']}, (error, output) => {
-//     if (error) {
-//       throw error;
-//     }
-//     interval(output);
-//   });
-// });
+fs.readFile('./src/data/mock.csv', (err, data) => {
+  if (err) {
+    throw err;
+  }
+  parse(data, {columns: ['timestamp', 'average', 'min', 'max']}, (error, output) => {
+    if (error) {
+      throw error;
+    }
+    interval(output);
+  });
+});
 
 app.get('/', (req, res) => {
   res.render('index');
@@ -46,38 +46,38 @@ app.get('/history', (req, res) => {
   });
 });
 
-// function interval(data) {
-//   let i = -1;
-//   tick();
+function interval(data) {
+  let i = -1;
+  tick();
 
-//   function tick() {
-//     i++;
-//     if (data[i]) {
-//       algorithm(data[i]);
-//       setTimeout(tick, 1000);
-//     }
-//   }
-// }
+  function tick() {
+    i++;
+    if (data[i]) {
+      algorithm(data[i]);
+      setTimeout(tick, 1000);
+    }
+  }
+}
 
-// function algorithm(measurement) {
-//   range = range.slice(-9).concat(measurement);
-//   const average = range.reduce((acc, result, i) => {
-//     if (i === range.length - 1) {
-//       return ((acc + Number(result.average)) / range.length);
-//     }
-//     return acc + Number(result.average);
-//   }, 0);
+function algorithm(measurement) {
+  range = range.slice(-9).concat(measurement);
+  const average = range.reduce((acc, result, i) => {
+    if (i === range.length - 1) {
+      return ((acc + Number(result.average)) / range.length);
+    }
+    return acc + Number(result.average);
+  }, 0);
 
-//   const variance = range.reduce((acc, result, i) => {
-//     if (i === range.length - 1) {
-//       return ((acc + Math.pow((Number(result.average) - average), 2)) / range.length);
-//     }
-//     return acc + Math.pow((Number(result.average) - average), 2);
-//   }, 0);
+  const variance = range.reduce((acc, result, i) => {
+    if (i === range.length - 1) {
+      return ((acc + Math.pow((Number(result.average) - average), 2)) / range.length);
+    }
+    return acc + Math.pow((Number(result.average) - average), 2);
+  }, 0);
 
-//   const deviation = Math.sqrt(variance);
-//   console.log(deviation);
-// }
+  const deviation = Math.sqrt(variance);
+  console.log(deviation);
+}
 
 fs.readFile('./src/data/messages.json', (err, data) => {
   if (err) {
