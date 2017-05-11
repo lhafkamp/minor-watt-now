@@ -50,7 +50,7 @@ app.get('/generator', (req, res) => {
 });
 
 function interval(data) {
-  let i = -1;
+  let i = 500;
   tick();
 
   function tick() {
@@ -58,7 +58,7 @@ function interval(data) {
     if (data[i]) {
       algorithm(data[i]);
       io.sockets.emit('dataPoint', data[i]);
-      setTimeout(tick, 100);
+      setTimeout(tick, 500);
     }
   }
 }
@@ -89,6 +89,7 @@ function algorithm(measurement) {
   }
 
   if (percentage > 100) {
+    io.sockets.emit('predicted', range[range.length - 1]);
     io.sockets.emit('newMessage', spike);
   }
 }

@@ -89,6 +89,10 @@ socket.on('dataPoint', point => {
   tick(point);
 });
 
+socket.on('predicted', result => {
+  console.log(result);
+});
+
 // Main loop
 function tick(point) {
   data.push(point);
