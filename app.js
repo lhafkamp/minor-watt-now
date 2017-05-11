@@ -48,16 +48,14 @@ function interval(data) {
     i++;
     if (data[i]) {
       algorithm(data[i]);
-      if (data[i]) {
-        io.sockets.emit('dataPoint', data[i]);
-      }
-      setTimeout(tick, 1000);
+      io.sockets.emit('dataPoint', data[i]);
+      setTimeout(tick, 100);
     }
   }
 }
 
 function algorithm(measurement) {
-  range = range.slice(-2).concat(measurement);
+  range = range.slice(-4).concat(measurement);
   const average = range.reduce((acc, result, i) => {
     if (i === range.length - 1) {
       return ((acc + Number(result.max)) / range.length);
@@ -72,11 +70,18 @@ function algorithm(measurement) {
     return acc + Math.pow((Number(result.max) - average), 2);
   }, 0);
 
-  deviations = deviations.slice(-1).concat(Math.sqrt(variance));
+  deviations = deviations.slice(-1).concat(Math.round(Math.sqrt(variance)));
 
-  if (deviations.length > 1) {
-    const percentage = (deviations[1] / deviations[0]) * 100;
-    console.log(percentage);
+  let percentage;
+
+  if (deviations.length > 1 && deviations[0] !== 0) {
+    percentage = Math.round(((deviations[1] / deviations[0]) * 100) - 100);
+    // console.log(deviations[1]);
+    percentage > 0 ? console.log(`+${percentage}%`) : console.log(`${percentage}%`);
+  }
+
+  if (percentage > 100) {
+    io.sockets.emit('newMessage', 'OMG piek incoming bitch');
   }
 }
 
@@ -89,23 +94,23 @@ fs.readFile('./src/data/messages.json', (err, data) => {
   downData = JSON.parse(data).filter(data => data.type === 'stroomdown');
 });
 
-io.on('connection', socket => {
-  setTimeout(() => {
-    socket.emit('newMessage', simData);
-  }, 1000);
-
-  setTimeout(() => {
-    socket.emit('newMessage', upData);
-  }, 7000);
-
-  setTimeout(() => {
-    socket.emit('newMessage', downData);
-  }, 8500);
-
-  setTimeout(() => {
-    socket.emit('removeMessage', upData);
-  }, 10000);
-});
+// io.on('connection', socket => {
+//   setTimeout(() => {
+//     socket.emit('newMessage', simData);
+//   }, 1000);
+//
+//   setTimeout(() => {
+//     socket.emit('newMessage', upData);
+//   }, 7000);
+//
+//   setTimeout(() => {
+//     socket.emit('newMessage', downData);
+//   }, 8500);
+//
+//   setTimeout(() => {
+//     socket.emit('removeMessage', upData);
+//   }, 10000);
+// });
 
 server.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
