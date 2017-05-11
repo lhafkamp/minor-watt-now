@@ -10,6 +10,7 @@ const server = http(app);
 const io = socketio(server);
 const port = process.env.PORT || 3000;
 
+let deviations = [];
 let range = [];
 let simData = '';
 let upData = '';
@@ -49,23 +50,27 @@ function interval(data) {
 }
 
 function algorithm(measurement) {
-  range = range.slice(-9).concat(measurement);
+  range = range.slice(-2).concat(measurement);
   const average = range.reduce((acc, result, i) => {
     if (i === range.length - 1) {
-      return ((acc + Number(result.average)) / range.length);
+      return ((acc + Number(result.max)) / range.length);
     }
-    return acc + Number(result.average);
+    return acc + Number(result.max);
   }, 0);
 
   const variance = range.reduce((acc, result, i) => {
     if (i === range.length - 1) {
-      return ((acc + Math.pow((Number(result.average) - average), 2)) / range.length);
+      return ((acc + Math.pow((Number(result.max) - average), 2)) / range.length);
     }
-    return acc + Math.pow((Number(result.average) - average), 2);
+    return acc + Math.pow((Number(result.max) - average), 2);
   }, 0);
 
-  const deviation = Math.sqrt(variance);
-  console.log(deviation);
+  deviations = deviations.slice(-1).concat(Math.sqrt(variance));
+
+  if (deviations.length > 1) {
+    const percentage = (deviations[1] / deviations[0]) * 100;
+    console.log(percentage);
+  }
 }
 
 fs.readFile('./src/data/messages.json', (err, data) => {
