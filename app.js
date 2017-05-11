@@ -19,17 +19,17 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-fs.readFile('./src/data/mock.csv', (err, data) => {
-  if (err) {
-    throw err;
-  }
-  parse(data, {columns: ['timestamp', 'average', 'min', 'max']}, (error, output) => {
-    if (error) {
-      throw error;
-    }
-    interval(output);
-  });
-});
+// fs.readFile('./src/data/mock.csv', (err, data) => {
+//   if (err) {
+//     throw err;
+//   }
+//   parse(data, {columns: ['timestamp', 'average', 'min', 'max']}, (error, output) => {
+//     if (error) {
+//       throw error;
+//     }
+//     interval(output);
+//   });
+// });
 
 app.get('/', (req, res) => {
   res.render('index');
@@ -39,38 +39,45 @@ app.get('/generator', (req, res) => {
   res.render('generator');
 });
 
-function interval(data) {
-  let i = -1;
-  tick();
+app.get('/history', (req, res) => {
+  const derp = 'werwer';
+  res.render('history', {
+    derp: derp
+  });
+});
 
-  function tick() {
-    i++;
-    if (data[i]) {
-      algorithm(data[i]);
-      setTimeout(tick, 1000);
-    }
-  }
-}
+// function interval(data) {
+//   let i = -1;
+//   tick();
 
-function algorithm(measurement) {
-  range = range.slice(-9).concat(measurement);
-  const average = range.reduce((acc, result, i) => {
-    if (i === range.length - 1) {
-      return ((acc + Number(result.average)) / range.length);
-    }
-    return acc + Number(result.average);
-  }, 0);
+//   function tick() {
+//     i++;
+//     if (data[i]) {
+//       algorithm(data[i]);
+//       setTimeout(tick, 1000);
+//     }
+//   }
+// }
 
-  const variance = range.reduce((acc, result, i) => {
-    if (i === range.length - 1) {
-      return ((acc + Math.pow((Number(result.average) - average), 2)) / range.length);
-    }
-    return acc + Math.pow((Number(result.average) - average), 2);
-  }, 0);
+// function algorithm(measurement) {
+//   range = range.slice(-9).concat(measurement);
+//   const average = range.reduce((acc, result, i) => {
+//     if (i === range.length - 1) {
+//       return ((acc + Number(result.average)) / range.length);
+//     }
+//     return acc + Number(result.average);
+//   }, 0);
 
-  const deviation = Math.sqrt(variance);
-  console.log(deviation);
-}
+//   const variance = range.reduce((acc, result, i) => {
+//     if (i === range.length - 1) {
+//       return ((acc + Math.pow((Number(result.average) - average), 2)) / range.length);
+//     }
+//     return acc + Math.pow((Number(result.average) - average), 2);
+//   }, 0);
+
+//   const deviation = Math.sqrt(variance);
+//   console.log(deviation);
+// }
 
 fs.readFile('./src/data/messages.json', (err, data) => {
   if (err) {
@@ -95,8 +102,12 @@ io.on('connection', socket => {
   }, 8500);
 
   setTimeout(() => {
-    socket.emit('removeMessage', upData);
-  }, 10000);
+    socket.emit('removeMessage', simData);
+  }, 3000);
+
+  setTimeout(() => {
+    socket.emit('removeMessage', downData);
+  }, 12000);
 });
 
 server.listen(port, () => {
