@@ -1,4 +1,6 @@
 const d3 = require('d3');
+const io = require('socket.io-client');
+const socket = io.connect();
 
 const data = [];
 
@@ -75,24 +77,14 @@ const areaPath = chart
   .attr('transform', `translate(${x(d3.timeMinute.offset(maxDate, 1))})`)
   .append('path');
 
-d3.csv('data/mock.csv', (error, data) => {
-  let index = 0;
+socket.on('dataPoint', point => {
+  point.minDate = new Date(point.timestamp * 1000);
+  point.maxDate = d3.timeMinute.offset(point.minDate, ticks);
 
-  setInterval(() => {
-    if (data[index + 1]) {
-      const point = data[index + 1];
+  minDate = point.minDate;
+  maxDate = point.maxDate;
 
-      point.minDate = new Date(point.timestamp * 1000);
-      point.maxDate = d3.timeMinute.offset(point.minDate, ticks);
-
-      minDate = point.minDate;
-      maxDate = point.maxDate;
-
-      tick(point);
-
-      index++;
-    }
-  }, duration);
+  tick(point);
 });
 
 // Main loop

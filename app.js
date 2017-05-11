@@ -47,6 +47,9 @@ function interval(data) {
     i++;
     if (data[i]) {
       algorithm(data[i]);
+      if (data[i]) {
+        io.sockets.emit('dataPoint', data[i]);
+      }
       setTimeout(tick, 1000);
     }
   }
