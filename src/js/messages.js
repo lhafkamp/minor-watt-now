@@ -3,12 +3,13 @@ const audio = document.querySelector('audio');
 const io = require('socket.io-client');
 const socket = io.connect();
 
-// hack to force-play audio on mobile
+// Hack to force-play audio on mobile
 document.addEventListener('touchstart', () => {
     audio.play();
     audio.pause();
 });
 
+// Create new message
 socket.on('newMessage', (data) => {
   audio.play();
   messageDOM(data[0]);
@@ -25,5 +26,22 @@ function messageDOM(data) {
       </div>
     </details>
   </article>
-`)
+  `)
 }
+
+// Remove message
+socket.on('removeMessage', (data) => {
+  let oldMessages = [];
+
+  document.body.querySelectorAll('summary').forEach(msg => {
+    oldMessages.push(msg.innerText);
+  });
+
+  const deadMessage = oldMessages.filter(msg => msg === data[0].message);
+
+  document.body.querySelectorAll('article').forEach(msg => {
+    if (msg.innerHTML.indexOf(deadMessage) !== -1) {
+      msg.remove();
+    }
+  });
+});

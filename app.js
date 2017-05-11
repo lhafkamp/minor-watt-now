@@ -80,7 +80,7 @@ fs.readFile('./src/data/messages.json', (err, data) => {
 io.on('connection', socket => {
   setTimeout(() => {
     socket.emit('newMessage', simData);
-  }, 3000);
+  }, 1000);
 
   setTimeout(() => {
     socket.emit('newMessage', upData);
@@ -89,6 +89,10 @@ io.on('connection', socket => {
   setTimeout(() => {
     socket.emit('newMessage', downData);
   }, 8500);
+
+  setTimeout(() => {
+    socket.emit('removeMessage', upData);
+  }, 10000);
 });
 
 server.listen(port, () => {
