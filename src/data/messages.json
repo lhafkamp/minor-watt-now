@@ -1,18 +1,18 @@
 [
   {
-    "type": "sim",
+    "type": "credit",
     "message": "Sim saldo is leeg",
     "header": "Opwaarderen",
     "advice": "Misschien moet je het even opwaarderen bro"
   },
   {
-    "type": "stroomup",
+    "type": "spike",
     "message": "Stroom is aan het stijgen",
     "header": "67%",
     "advice": "Misschien moet je even een nieuwe generator aanzetten bro"
   },
   {
-    "type": "stroomdown",
+    "type": "drop",
     "message": "Stroom is aan het dalen",
     "header": "32%",
     "advice": "Misschien moet je even een generator uitzetten bro"

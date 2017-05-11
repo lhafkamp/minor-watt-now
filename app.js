@@ -24,9 +24,9 @@ fs.readFile('./src/data/messages.json', (err, data) => {
   if (err) {
     throw err;
   }
-  credit = JSON.parse(data).filter(data => data.type === 'sim');
-  spike = JSON.parse(data).filter(data => data.type === 'stroomup');
-  drop = JSON.parse(data).filter(data => data.type === 'stroomdown');
+  credit = JSON.parse(data).filter(data => data.type === 'credit');
+  spike = JSON.parse(data).filter(data => data.type === 'spike');
+  drop = JSON.parse(data).filter(data => data.type === 'drop');
 });
 
 fs.readFile('./src/data/mock.csv', (err, data) => {
