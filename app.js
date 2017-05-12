@@ -67,7 +67,7 @@ app.get('/generator', (req, res) => {
 });
 
 function interval(data) {
-  let i = 2300;
+  let i = 2350;
   tick();
 
   function tick() {
@@ -75,7 +75,7 @@ function interval(data) {
     if (data[i]) {
       algorithm(data[i]);
       io.sockets.emit('dataPoint', data[i]);
-      setTimeout(tick, 200);
+      setTimeout(tick, 250);
     }
   }
 }
@@ -149,18 +149,17 @@ function algorithm(measurement) {
   }
 
   if (percentageMax > 80) {
-    if (performances)
     range[range.length - 1].type = 'prediction';
     range[range.length - 1].kind = 'spike';
     io.sockets.emit('predicted', range[range.length - 1]);
-    // io.sockets.emit('newMessage', spike);
+    io.sockets.emit('newMessage', spike);
   }
 
-  if (percentageMin > 150) {
-    range[range.length - 1].type = 'prediction';
-    range[range.length - 1].kind = 'drop';
-    io.sockets.emit('predicted', range[range.length - 1]);
-  }
+  // if (percentageMin > 150) {
+  //   range[range.length - 1].type = 'prediction';
+  //   range[range.length - 1].kind = 'drop';
+  //   io.sockets.emit('predicted', range[range.length - 1]);
+  // }
 
   // if (rangetwo.length > 2) {
   //   inclinations = inclinations.slice(-1).concat(((Number(rangetwo[2].max) + Number(rangetwo[1].max) + Number(rangetwo[0].max)) / 3));
