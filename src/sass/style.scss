@@ -70,6 +70,16 @@ nav {
     z-index: 400;
   }
 
+  .newGreen {
+    position: absolute;
+    padding: .1em;
+    bottom: 1em;
+    right: 1em;
+    border-radius: 50%;
+    border: .4em solid $accentGreen;
+    z-index: 400;
+  }
+
   details {
     cursor: pointer;
     margin-bottom: .2em;
