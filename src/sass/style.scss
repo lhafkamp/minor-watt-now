@@ -8,7 +8,7 @@
 body {
   background: #EFEFEF;
   color: #808080;
-  font-weight: 100;
+  font-weight: normal;
   font-family: sans-serif;
 }
 
@@ -34,10 +34,10 @@ nav {
   overflow: scroll;
 
   h1 {
-    font-weight: 100;
     padding-bottom: .6em;
     border-bottom: 1px solid grey;
     margin-bottom: .9em;
+    font-weight: 300;
   }
 
   .new {
