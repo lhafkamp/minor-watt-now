@@ -30,6 +30,8 @@ nav {
 #advice {
   background: white;
   padding: 6em 1em 3em 1em;
+  height: 28em;
+  overflow: scroll;
 
   h1 {
     font-weight: 100;
@@ -80,7 +82,8 @@ nav {
   overflow-y: hidden;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
-  padding: 1em 0;
+  padding: 1em 0 13em;
+  border-top: 17px solid white;
 
   article {
     display: flex;
