@@ -42,6 +42,7 @@
       "browser"
     ],
     "rules": {
+      "capitalized-comments": 0,
       "operator-linebreak": 0,
       "camelcase": 0,
       "no-implicit-coercion": 0,

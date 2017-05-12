@@ -115,7 +115,7 @@ function drawPrediction(point) {
     .enter().append('circle')
       .attr('class', 'prediction')
       .style('fill', d => d.kind === 'spike' ? '#F12D4B' : '#27C86A')
-      .attr('r', 10)
+      .attr('r', 5)
       .attr('cx', d => x(d3.timeMinute.offset(d.date, ticks)))
       .attr('cy', d => y(d.average));
 }
@@ -126,8 +126,6 @@ function drawPerformances(point) {
   }
 
   chart.selectAll('.performance').remove();
-
-  console.log(performances);
 
   chart.selectAll('.performance')
       .data(performances)
