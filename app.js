@@ -18,6 +18,9 @@ let inclinations = [];
 let credit;
 let spike;
 let drop;
+let expected;
+let performancesStart = [];
+let performancesEnd = [];
 
 app.use(express.static(path.join(__dirname, '/public')));
 app.set('views', path.join(__dirname, 'views'));
@@ -30,6 +33,7 @@ fs.readFile('./src/data/messages.json', (err, data) => {
   credit = JSON.parse(data).filter(data => data.type === 'credit');
   spike = JSON.parse(data).filter(data => data.type === 'spike');
   drop = JSON.parse(data).filter(data => data.type === 'drop');
+  expected = JSON.parse(data).filter(data => data.type === 'expected');
 });
 
 fs.readFile('./src/data/mock.csv', (err, data) => {
@@ -44,6 +48,16 @@ fs.readFile('./src/data/mock.csv', (err, data) => {
   });
 });
 
+fs.readFile('./public/data/performances.json', (err, data) => {
+  if (err) {
+    throw err;
+  }
+  const json = JSON.parse(data);
+  json.forEach(performance => {
+    performance.start ? performancesStart.push(performance.start) : performancesEnd.push(performance.end);
+  });
+});
+
 app.get('/', (req, res) => {
   res.render('index');
 });
@@ -53,7 +67,7 @@ app.get('/generator', (req, res) => {
 });
 
 function interval(data) {
-  let i = 2400;
+  let i = 2300;
   tick();
 
   function tick() {
@@ -61,7 +75,7 @@ function interval(data) {
     if (data[i]) {
       algorithm(data[i]);
       io.sockets.emit('dataPoint', data[i]);
-      setTimeout(tick, 100);
+      setTimeout(tick, 200);
     }
   }
 }
@@ -71,7 +85,8 @@ function algorithm(measurement) {
   let averageMin;
   let varianceMax;
   let varianceMin;
-  let percentage;
+  let percentageMax;
+  let percentageMin;
 
   range = range.slice(-6).concat(measurement);
   // rangetwo = range.slice(-2).concat(measurement);
@@ -124,8 +139,27 @@ function algorithm(measurement) {
   }
 
   if (deviationsMax.length > 1 && deviationsMax[0] !== 0) {
-    percentage = Math.round(((deviationsMax[1] / deviationsMax[0]) * 100) - 100);
-    percentage > 0 ? console.log(`+${percentage}%`) : console.log(`${percentage}%`);
+    percentageMax = Math.round(((deviationsMax[1] / deviationsMax[0]) * 100) - 100);
+    // percentageMax > 0 ? console.log(`+${percentageMax}%`) : console.log(`${percentageMax}%`);
+  }
+
+  if (deviationsMin.length > 1 && deviationsMin[0] !== 0) {
+    percentageMin = Math.round(((deviationsMin[1] / deviationsMin[0]) * 100) - 100);
+    // console.log(percentageMin);
+  }
+
+  if (percentageMax > 80) {
+    if (performances)
+    range[range.length - 1].type = 'prediction';
+    range[range.length - 1].kind = 'spike';
+    io.sockets.emit('predicted', range[range.length - 1]);
+    // io.sockets.emit('newMessage', spike);
+  }
+
+  if (percentageMin > 150) {
+    range[range.length - 1].type = 'prediction';
+    range[range.length - 1].kind = 'drop';
+    io.sockets.emit('predicted', range[range.length - 1]);
   }
 
   // if (rangetwo.length > 2) {
@@ -139,15 +173,8 @@ function algorithm(measurement) {
   // if (fuck > 10) {
   //   io.sockets.emit('predicted', rangetwo[rangetwo.length - 1]);
   // }
-
-  if (percentage > 80) {
-    console.log(percentage);
-    range[range.length - 1].type = 'prediction';
-    range[range.length - 1].kind = 'spike';
-    io.sockets.emit('predicted', range[range.length - 1]);
-    io.sockets.emit('newMessage', spike);
-  }
-  // if (percentage < -50) {
+  //
+  // if (percentageMax < -50) {
   //   io.sockets.emit('predicted', range[range.length - 1]);
   // }
 }
