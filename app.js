@@ -115,6 +115,10 @@ function algorithm(measurement) {
   // }
 }
 
+// setTimeout(() => {
+//   io.sockets.emit('newMessage', credit);
+// }, 16000);
+
 server.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
