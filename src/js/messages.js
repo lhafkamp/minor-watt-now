@@ -18,10 +18,19 @@ socket.on('newMessage', data => {
 });
 
 function messageDOM(data) {
+  let spanColor;
+  if (data.type === 'credit') {
+    spanColor = 'newYellow';
+  } else if (data.type === 'drop') {
+    spanColor = 'newBlue';
+  } else {
+    spanColor = 'new';
+  }
+
   return advice.insertAdjacentHTML('afterbegin',
   `<article>
     <details>
-      <summary>${data.message}<span id="1" class="new"></span></summary>
+      <summary>${data.message}<span id="1" class="${spanColor}"></span></summary>
       <div>
         <h2>${data.header}</h2>
         <p>${data.advice}</p>

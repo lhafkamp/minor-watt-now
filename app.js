@@ -145,12 +145,24 @@ function algorithm(measurement) {
     range[range.length - 1].type = 'prediction';
     range[range.length - 1].kind = 'spike';
     io.sockets.emit('predicted', range[range.length - 1]);
-    // io.sockets.emit('newMessage', spike);
+    io.sockets.emit('newMessage', spike);
   }
   // if (percentage < -50) {
   //   io.sockets.emit('predicted', range[range.length - 1]);
   // }
 }
+
+setTimeout(() => {
+  io.sockets.emit('newMessage', credit);
+}, 16000);
+
+setTimeout(() => {
+  io.sockets.emit('removeMessage', credit);
+}, 22000);
+
+setTimeout(() => {
+  io.sockets.emit('newMessage', credit);
+}, 28000);
 
 server.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
