@@ -26,6 +26,9 @@ function messageSeen(e) {
   if (e.target.nodeName === 'SUMMARY') {
     const oldMessage = e.target.querySelector('span');
     oldMessage.classList.remove('new');
+    oldMessage.classList.remove('newYellow');
+    oldMessage.classList.remove('newBlue');
+    oldMessage.classList.remove('newGreen');
 
     newArray.push(spanId);
     newArray.push(oldMessage.id)

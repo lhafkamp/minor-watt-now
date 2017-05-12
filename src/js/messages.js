@@ -22,6 +22,8 @@ function messageDOM(data) {
   if (data.type === 'credit') {
     spanColor = 'newYellow';
   } else if (data.type === 'drop') {
+    spanColor = 'newGreen';
+  } else if (data.type === 'expected') {
     spanColor = 'newBlue';
   } else {
     spanColor = 'new';

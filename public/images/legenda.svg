@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Laag_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 133.1 82.1" style="enable-background:new 0 0 133.1 82.1;" xml:space="preserve">
+<style type="text/css">
+	.st0{font-family:'MyriadPro-Regular';}
+	.st1{font-size:14px;}
+	.st2{fill:#E7324D;}
+	.st3{fill:#4DB169;}
+	.st4{opacity:0.5;fill:#4DB169;}
+	.st5{opacity:0.5;fill:#E7324D;}
+</style>
+<g id="XMLID_8_">
+	<text id="XMLID_1_" transform="matrix(1 0 0 1 24.8769 11.6087)" class="st0 st1">Verwachte stijging</text>
+	<circle id="XMLID_2_" class="st2" cx="7.5" cy="7.5" r="7.5"/>
+</g>
+<g id="XMLID_10_">
+	<text id="XMLID_3_" transform="matrix(1 0 0 1 24.8769 33.9618)" class="st0 st1">Verwachte daling</text>
+	<circle id="XMLID_7_" class="st3" cx="7.5" cy="29.9" r="7.5"/>
+</g>
+<g id="XMLID_11_">
+	<text id="XMLID_5_" transform="matrix(1 0 0 1 24.8769 56.3154)" class="st0 st1">Start optreden</text>
+	<rect id="XMLID_6_" x="5.5" y="44.7" class="st4" width="4" height="15"/>
+</g>
+<g id="XMLID_12_">
+	<text id="XMLID_4_" transform="matrix(1 0 0 1 24.8769 78.6687)" class="st0 st1">Eind optreden</text>
+	<rect id="XMLID_9_" x="5.5" y="67.1" class="st5" width="4" height="15"/>
+</g>
+</svg>
