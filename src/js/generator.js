@@ -20,6 +20,8 @@ let maxDate = d3.timeMinute.offset(minDate, -ticks);
 
 const parseTime = d3.timeFormat('%H:%M');
 
+let performanceData = [];
+
 const chart = d3.select('#chart')
   .attr('width', width + margin.left + margin.right)
   .attr('height', height + margin.top + margin.bottom)
@@ -134,7 +136,33 @@ function drawPerformances(point) {
       .attr('height', 20)
       .attr('transform', 'translate(-10, -10)')
       .attr('x', d => x(d3.timeMinute.offset(d.date, ticks)))
-      .attr('y', d => y(d.average));
+      .attr('y', 0);
+}
+
+d3.json('/data/performances.json', data => {
+  data.forEach(performance => {
+    performance.startDate = new Date(performance.start * 1000);
+    performance.endDate = new Date(performance.end * 1000);
+  });
+
+  performanceData = data;
+
+  console.log(performanceData);
+});
+
+function checkPerformance() {
+  if (performanceData.length !== 0) {
+    performanceData.forEach(performance => {
+      if (Date.parse(maxDate) === Date.parse(performance.startDate)) {
+        performance.kind = 'start';
+        performance.date = performance.startDate;
+        drawPerformances(performance);
+      } else if (Date.parse(maxDate) === Date.parse(performance.endDate)) {
+        performance.kind = 'end';
+        performance.date = performance.endDate;
+      }
+    });
+  }
 }
 
 // Main loop
@@ -167,4 +195,5 @@ function tick(point) {
 
   drawPrediction();
   drawPerformances();
+  checkPerformance();
 }

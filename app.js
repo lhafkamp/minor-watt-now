@@ -50,7 +50,7 @@ app.get('/generator', (req, res) => {
 });
 
 function interval(data) {
-  let i = 500;
+  let i = 2400;
   tick();
 
   function tick() {
