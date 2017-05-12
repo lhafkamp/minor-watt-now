@@ -35,6 +35,7 @@ With this information they can see how they need to handle their generators.
 -  [x] real-time notifications about different issues concerning the generators
 -  [x] real-time D3.js graph that shows how much voltage is used per minute
 -  [x] history of old notifications
+-  [x] see when a band is playing
 
 ## How does it work?
 The app gets real time data from the generators at the festival. It uses an algorithm to determine if the infra-team members need to get a notification. The notifications are real-time and have a badge when they are not read.
@@ -64,6 +65,7 @@ To start the server.
 ## Wishlist
 -  [ ] multiple working graphs
 -  [ ] uploading new timetables to the app
+-  [ ] more accuracy for the drops
 -  [ ] getting real 2G credit data that sends a notification once its low
 
 ## Team
