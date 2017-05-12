@@ -127,14 +127,16 @@ function drawPerformances(point) {
 
   chart.selectAll('.performance').remove();
 
+  console.log(performances);
+
   chart.selectAll('.performance')
       .data(performances)
     .enter().append('rect')
       .attr('class', 'performance')
-      .style('fill', d => d.kind === 'start' ? '#F12D4B' : '#27C86A')
-      .attr('width', 20)
-      .attr('height', 20)
-      .attr('transform', 'translate(-10, -10)')
+      .style('fill', d => d.kind === 'start' ? '#27C86A' : '#F12D4B')
+      .style('fill-opacity', '0.5')
+      .attr('width', 5)
+      .attr('height', height)
       .attr('x', d => x(d3.timeMinute.offset(d.date, ticks)))
       .attr('y', 0);
 }
@@ -146,20 +148,23 @@ d3.json('/data/performances.json', data => {
   });
 
   performanceData = data;
-
-  console.log(performanceData);
 });
 
 function checkPerformance() {
   if (performanceData.length !== 0) {
     performanceData.forEach(performance => {
-      if (Date.parse(maxDate) === Date.parse(performance.startDate)) {
-        performance.kind = 'start';
-        performance.date = performance.startDate;
-        drawPerformances(performance);
-      } else if (Date.parse(maxDate) === Date.parse(performance.endDate)) {
-        performance.kind = 'end';
-        performance.date = performance.endDate;
+      if (Date.parse(minDate) === Date.parse(performance.startDate)) {
+        const point = {
+          kind: 'start',
+          date: performance.startDate
+        };
+        drawPerformances(point);
+      } else if (Date.parse(minDate) === Date.parse(performance.endDate)) {
+        const point = {
+          kind: 'end',
+          date: performance.endDate
+        };
+        drawPerformances(point);
       }
     });
   }

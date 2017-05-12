@@ -58,7 +58,7 @@ function interval(data) {
     if (data[i]) {
       algorithm(data[i]);
       io.sockets.emit('dataPoint', data[i]);
-      setTimeout(tick, 500);
+      setTimeout(tick, 200);
     }
   }
 }
