@@ -30,6 +30,8 @@ nav {
 #advice {
   background: white;
   padding: 6em 1em 3em 1em;
+  height: 28em;
+  overflow: scroll;
 
   h1 {
     font-weight: 100;
@@ -80,13 +82,14 @@ nav {
   overflow-y: hidden;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
-  padding: 1em 0 2em;
+  padding: 1em 0 13em;
+  border-top: 17px solid white;
 
   article {
     display: flex;
     flex-wrap: wrap;
     background: white;
-    margin: 1em 0em 2em 1em;
+    margin: 0 0 0 1em;
     min-width: 85%;
     box-shadow: 5px 5px 5px #ccc;
 
@@ -103,9 +106,6 @@ nav {
     }
 
     div {
-      width: 100%;
-      padding: 1em 1em 2em 1em;
-
       h2 {
         line-height: 1.4em;
       }

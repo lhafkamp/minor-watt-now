@@ -105,6 +105,8 @@ function algorithm(measurement) {
   // }
 
   if (percentage > 80) {
+    range[range.length - 1].type = 'prediction';
+    range[range.length - 1].kind = 'spike';
     io.sockets.emit('predicted', range[range.length - 1]);
     // io.sockets.emit('newMessage', spike);
   }
