@@ -12,6 +12,8 @@ const port = process.env.PORT || 3000;
 
 let deviations = [];
 let range = [];
+let rangetwo = [];
+let inclinations = [];
 let credit;
 let spike;
 let drop;
@@ -50,7 +52,7 @@ app.get('/generator', (req, res) => {
 });
 
 function interval(data) {
-  let i = 500;
+  let i = 2400;
   tick();
 
   function tick() {
@@ -58,13 +60,15 @@ function interval(data) {
     if (data[i]) {
       algorithm(data[i]);
       io.sockets.emit('dataPoint', data[i]);
-      setTimeout(tick, 500);
+      setTimeout(tick, 200);
     }
   }
 }
 
 function algorithm(measurement) {
-  range = range.slice(-4).concat(measurement);
+  range = range.slice(-6).concat(measurement);
+  // rangetwo = range.slice(-2).concat(measurement);
+
   const average = range.reduce((acc, result, i) => {
     if (i === range.length - 1) {
       return ((acc + Number(result.max)) / range.length);
@@ -88,10 +92,25 @@ function algorithm(measurement) {
     percentage > 0 ? console.log(`+${percentage}%`) : console.log(`${percentage}%`);
   }
 
-  if (percentage > 100) {
+  // if (rangetwo.length > 2) {
+  //   inclinations = inclinations.slice(-1).concat(((Number(rangetwo[2].max) + Number(rangetwo[1].max) + Number(rangetwo[0].max)) / 3));
+  // }
+  // let fuck;
+  // if (inclinations.length > 1) {
+  //   fuck = Math.round(((inclinations[1] / inclinations[0]) * 100) - 100);
+  //   console.log(fuck);
+  // }
+  // if (fuck > 10) {
+  //   io.sockets.emit('predicted', rangetwo[rangetwo.length - 1]);
+  // }
+
+  if (percentage > 80) {
     io.sockets.emit('predicted', range[range.length - 1]);
-    io.sockets.emit('newMessage', spike);
+    // io.sockets.emit('newMessage', spike);
   }
+  // if (percentage < -50) {
+  //   io.sockets.emit('predicted', range[range.length - 1]);
+  // }
 }
 
 server.listen(port, () => {
