@@ -10,7 +10,8 @@ const server = http(app);
 const io = socketio(server);
 const port = process.env.PORT || 3000;
 
-let deviations = [];
+let deviationsMax = [];
+let deviationsMin = [];
 let range = [];
 let rangetwo = [];
 let inclinations = [];
@@ -60,35 +61,70 @@ function interval(data) {
     if (data[i]) {
       algorithm(data[i]);
       io.sockets.emit('dataPoint', data[i]);
-      setTimeout(tick, 200);
+      setTimeout(tick, 100);
     }
   }
 }
 
 function algorithm(measurement) {
+  let averageMax;
+  let averageMin;
+  let varianceMax;
+  let varianceMin;
+  let percentage;
+
   range = range.slice(-6).concat(measurement);
   // rangetwo = range.slice(-2).concat(measurement);
 
-  const average = range.reduce((acc, result, i) => {
-    if (i === range.length - 1) {
-      return ((acc + Number(result.max)) / range.length);
-    }
-    return acc + Number(result.max);
-  }, 0);
+  Promise.all([calculateAverage('max'), calculateAverage('min')])
+    .then(() => {
+      calculateVariance('max', averageMax);
+      calculateVariance('min', averageMin);
+    })
+    .then(() => {
+      deviationsMax = deviationsMax.slice(-1).concat(Math.round(Math.sqrt(varianceMax)));
+      deviationsMin = deviationsMin.slice(-1).concat(Math.round(Math.sqrt(varianceMin)));
+    })
+    .catch(err => {
+      console.error(err);
+    });
 
-  const variance = range.reduce((acc, result, i) => {
-    if (i === range.length - 1) {
-      return ((acc + Math.pow((Number(result.max) - average), 2)) / range.length);
-    }
-    return acc + Math.pow((Number(result.max) - average), 2);
-  }, 0);
+  function calculateAverage(property) {
+    return new Promise((resolve, reject) => {
+      try {
+        const average = range.reduce((acc, result, i) => {
+          if (i === range.length - 1) {
+            return ((acc + Number(result[property])) / range.length);
+          }
+          return acc + Number(result[property]);
+        }, 0);
+        property === 'max' ? averageMax = average : averageMin = average;
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 
-  deviations = deviations.slice(-1).concat(Math.round(Math.sqrt(variance)));
+  function calculateVariance(property, average) {
+    return new Promise((resolve, reject) => {
+      try {
+        const variance = range.reduce((acc, result, i) => {
+          if (i === range.length - 1) {
+            return ((acc + Math.pow((Number(result[property]) - average), 2)) / range.length);
+          }
+          return acc + Math.pow((Number(result[property]) - average), 2);
+        }, 0);
+        property === 'max' ? varianceMax = variance : varianceMin = variance;
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 
-  let percentage;
-
-  if (deviations.length > 1 && deviations[0] !== 0) {
-    percentage = Math.round(((deviations[1] / deviations[0]) * 100) - 100);
+  if (deviationsMax.length > 1 && deviationsMax[0] !== 0) {
+    percentage = Math.round(((deviationsMax[1] / deviationsMax[0]) * 100) - 100);
     percentage > 0 ? console.log(`+${percentage}%`) : console.log(`${percentage}%`);
   }
 
@@ -105,6 +141,7 @@ function algorithm(measurement) {
   // }
 
   if (percentage > 80) {
+    console.log(percentage);
     range[range.length - 1].type = 'prediction';
     range[range.length - 1].kind = 'spike';
     io.sockets.emit('predicted', range[range.length - 1]);
